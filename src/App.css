@@ -1,0 +1,176 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+    background:#ebedf3;
+    color:#fff;
+}
+
+/* HEADER */
+
+.header{
+    width:700px;
+    margin:40px auto 25px;
+    background:#18191f;
+    border-radius:18px;
+    padding:25px;
+    border-left:5px solid #8080ff;
+    box-shadow:0 8px 20px rgba(0,0,0,.35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.header h1{
+    color:#b689f1;
+    margin-bottom:8px;
+}
+
+.header p{
+    color:#b8b8b8;
+}
+
+/* FORMULARIO */
+
+.formulario{
+    width:700px;
+    margin:auto;
+    background:#18191f;
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 8px 20px rgba(0,0,0,.35);
+}
+
+.formulario h2{
+    color:#b689f1;
+    margin-bottom:25px;
+    border-left:5px solid #8080ff;
+    padding-left:15px;
+}
+
+/* CAMPOS */
+
+.campo{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:20px;
+}
+
+.campo label{
+    color:#d7d7d7;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+.campo input,
+.campo textarea,
+.campo select{
+    background:#23242c;
+    border:1px solid #33374a;
+    color:white;
+    padding:14px;
+    border-radius:10px;
+    outline:none;
+    font-size:15px;
+    transition:.3s;
+}
+
+.campo input:focus,
+.campo textarea:focus,
+.campo select:focus{
+    border-color:#8a75eb;
+    box-shadow:0 0 10px rgba(79,124,255,.4);
+}
+
+.campo textarea{
+    resize:vertical;
+}
+
+.campo input[type=file]{
+    padding:10px;
+}
+
+/* BOTONES */
+
+.botones{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    margin-top:30px;
+}
+
+.botones button{
+    flex:1;
+    border:none;
+    padding:14px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.botones button:first-child{
+    background:#303342;
+    color:white;
+}
+
+.botones button:first-child:hover{
+    background:#3b4052;
+}
+
+.botones button:last-child{
+    background:#855cf8;
+    color:white;
+}
+
+.botones button:last-child:hover{
+    background:#9635f0;
+}
+
+/* FOOTER */
+
+.footer{
+    width:700px;
+    margin:30px auto;
+    background:#18191f;
+    border-radius:18px;
+    border-left:5px solid #5d5cff;
+    padding:20px;
+    text-align:center;
+    color:#bcbcbc;
+    box-shadow:0 8px 20px rgba(0,0,0,.35);
+}
+
+
+.preview-seccion {
+    margin-top: 25px;
+    padding: 20px;
+    background: #23242c;
+    border-radius: 12px;
+    border-left: 4px solid #5d5cff;
+}
+
+.preview-seccion h3 {
+    color: #7911f0;
+    margin-bottom: 15px;
+}
+
+.preview-seccion p {
+    color: #d7d7d7;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.preview-seccion strong {
+    color: white;
+}
+
+.preview-seccion small {
+    color: #aaa;
+}
