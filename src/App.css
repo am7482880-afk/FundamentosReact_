@@ -174,3 +174,76 @@ body{
 .preview-seccion small {
     color: #aaa;
 }
+
+
+/**/
+.grupo-agregar-curso {
+    display: flex;
+    gap: 8px;
+}
+
+.grupo-agregar-curso input {
+    flex: 1;
+}
+
+/* Botón Agregar Curso */
+.btn-agregar {
+    background: #855cf8;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: .3s;
+}
+
+.btn-agregar:hover {
+    background: #9635f0;
+}
+
+/* Lista de cursos guardados */
+.lista-cursos {
+    margin-top: 15px;
+    padding-left: 0;
+    list-style: none;
+}
+
+.lista-cursos li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #23242c;
+    border: 1px solid #33374a;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    color: #d7d7d7;
+    font-size: 14px;
+}
+
+/* Botón interno para eliminar curso (✕) */
+.btn-eliminar {
+    background: transparent;
+    border: none;
+    color: #ff4d4d;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 0 5px;
+    transition: .2s;
+}
+
+.btn-eliminar:hover {
+    color: #ff3333;
+    transform: scale(1.15);
+}
+
+/* Texto de archivo adjuntado */
+.archivo-adjunto {
+    display: block;
+    margin-top: 8px;
+    color: #bcbcbc;
+    font-size: 13px;
+}

@@ -7,24 +7,57 @@ function FormularioAcademico({
   onSiguiente
 }) {
 
-  // Estado local para el nombre del curso que se está escribiendo
   const [nuevoCurso, setNuevoCurso] = useState('');
 
-  // Función para agregar el nombre del curso al array 'cursos'
   const agregarCurso = () => {
     if (!nuevoCurso.trim()) return;
 
     setDatos({
       ...datos,
-      cursos: [...(Array.isArray(datos.cursos) ? datos.cursos : []), nuevoCurso]
+      cursos: [...(Array.isArray(datos.cursos) ? datos.cursos : []), nuevoCurso.trim()]
     });
 
-    // Limpia el input del curso
     setNuevoCurso('');
+  };
+
+  const eliminarCurso = (indexParaEliminar) => {
+    const cursosActuales = Array.isArray(datos.cursos) ? datos.cursos : [];
+    const cursosFiltrados = cursosActuales.filter((_, index) => index !== indexParaEliminar);
+    
+    setDatos({
+      ...datos,
+      cursos: cursosFiltrados
+    });
   };
 
   const continuar = (e) => {
     e.preventDefault();
+
+    if (datos.institucion.trim() === ""){
+      alert("Agregue la institucion");
+      return;
+    }
+
+    if (datos.titulo.trim() === ""){
+      alert("Agregue el titulo");
+      return;
+    } 
+
+    if (datos.fechaInicio.trim() === ""){
+      alert("Seleccione la fecha de inicio");
+      return;
+    }
+
+    if (datos.fechaFinalizacion.trim() === ""){
+      alert("Ingrese la fecha de finalizacion");
+      return;
+    }
+
+    if (!Array.isArray(datos.cursos) || datos.cursos.length === 0) {
+      alert("Debes agregar al menos un curso para continuar");
+      return; 
+    }
+
     onSiguiente();
   };
 
@@ -114,11 +147,10 @@ function FormularioAcademico({
         />
       </div>
 
-      {/* --- CURSOS REALIZADOS (SOLO NOMBRE) --- */}
       <div className="campo">
         <label>Cursos realizados</label>
 
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div className="grupo-agregar-curso">
           <input
             type="text"
             placeholder="Escriba un curso realizado"
@@ -128,17 +160,27 @@ function FormularioAcademico({
 
           <button
             type="button"
+            className="btn-agregar"
             onClick={agregarCurso}
           >
             Agregar
           </button>
         </div>
 
-        {/* Muestra la lista de cursos a medida que los agregas */}
         {Array.isArray(datos.cursos) && datos.cursos.length > 0 && (
-          <ul style={{ marginTop: '10px' }}>
+          <ul className="lista-cursos">
             {datos.cursos.map((curso, index) => (
-              <li key={index}>{curso}</li>
+              <li key={index}>
+                <span>{curso}</span>
+                <button
+                  type="button"
+                  className="btn-eliminar"
+                  onClick={() => eliminarCurso(index)}
+                  title="Eliminar curso"
+                >
+                  ✕
+                </button>
+              </li>
             ))}
           </ul>
         )}
@@ -158,7 +200,7 @@ function FormularioAcademico({
         />
 
         {datos.certificadoAcademico && (
-          <small>
+          <small className="archivo-adjunto">
             Archivo: {datos.certificadoAcademico.name}
           </small>
         )}
