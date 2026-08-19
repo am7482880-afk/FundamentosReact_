@@ -247,3 +247,70 @@ body{
     color: #bcbcbc;
     font-size: 13px;
 }
+
+/* */
+
+/* Botón ancho para empaquetar la experiencia actual */
+.btn-bloque-agregar {
+    width: 100%;
+    background: #3a3f58;
+    color: #b689f1;
+    border: 2px dashed #8080ff;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    transition: .3s;
+}
+
+.btn-bloque-agregar:hover {
+    background: #474d6c;
+    color: white;
+    border-color: #9635f0;
+    box-shadow: 0 4px 12px rgba(128, 128, 255, 0.2);
+}
+
+.contenedor-experiencias-lista {
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+.contenedor-experiencias-lista h3 {
+    font-size: 16px;
+    color: #b8b8b8;
+    margin-bottom: 12px;
+}
+
+.lista-experiencias {
+    padding-left: 0;
+    list-style: none;
+}
+
+.lista-experiencias li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #23242c;
+    border: 1px solid #33374a;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    color: #d7d7d7;
+}
+
+.info-exp strong {
+    color: #white;
+}
+
+.info-exp em {
+    color: #b689f1;
+    font-style: normal;
+}
+
+.info-exp small {
+    color: #aaa;
+}
+
