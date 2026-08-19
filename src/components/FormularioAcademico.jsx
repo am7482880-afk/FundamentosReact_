@@ -1,9 +1,27 @@
+import { useState } from 'react';
+
 function FormularioAcademico({
   datos,
   setDatos,
   onVolver,
   onSiguiente
 }) {
+
+  // Estado local para el nombre del curso que se está escribiendo
+  const [nuevoCurso, setNuevoCurso] = useState('');
+
+  // Función para agregar el nombre del curso al array 'cursos'
+  const agregarCurso = () => {
+    if (!nuevoCurso.trim()) return;
+
+    setDatos({
+      ...datos,
+      cursos: [...(Array.isArray(datos.cursos) ? datos.cursos : []), nuevoCurso]
+    });
+
+    // Limpia el input del curso
+    setNuevoCurso('');
+  };
 
   const continuar = (e) => {
     e.preventDefault();
@@ -96,20 +114,34 @@ function FormularioAcademico({
         />
       </div>
 
+      {/* --- CURSOS REALIZADOS (SOLO NOMBRE) --- */}
       <div className="campo">
         <label>Cursos realizados</label>
 
-        <input
-          type="text"
-          placeholder="Escriba los cursos realizados"
-          value={datos.cursos}
-          onChange={(e) =>
-            setDatos({
-              ...datos,
-              cursos: e.target.value
-            })
-          }
-        />
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <input
+            type="text"
+            placeholder="Escriba un curso realizado"
+            value={nuevoCurso}
+            onChange={(e) => setNuevoCurso(e.target.value)}
+          />
+
+          <button
+            type="button"
+            onClick={agregarCurso}
+          >
+            Agregar
+          </button>
+        </div>
+
+        {/* Muestra la lista de cursos a medida que los agregas */}
+        {Array.isArray(datos.cursos) && datos.cursos.length > 0 && (
+          <ul style={{ marginTop: '10px' }}>
+            {datos.cursos.map((curso, index) => (
+              <li key={index}>{curso}</li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className="campo">

@@ -26,10 +26,18 @@ function VistaPrevia({ datos, onVolver, onEditarAcademico }) {
         <p><strong>Fecha de inicio:</strong> {datos.fechaInicio}</p>
         <p><strong>Fecha de finalización:</strong> {datos.fechaFinalizacion}</p>
 
-        <p>
-          <strong>Curso:</strong>{" "}
-          {datos.cursos || "No registrado"}
-        </p>
+        <div>
+          <strong>Cursos:</strong>
+          {Array.isArray(datos.cursos) && datos.cursos.length > 0 ? (
+            <ul>
+              {datos.cursos.map((curso, index) => (
+                <li key={index}>{curso}</li>
+              ))}
+            </ul>
+          ) : (
+            <span> No registrado</span>
+          )}
+        </div>
 
         <p>
           <strong>Certificado:</strong>{" "}
@@ -47,23 +55,30 @@ function VistaPrevia({ datos, onVolver, onEditarAcademico }) {
       </section>
 
       <section className="preview-seccion">
-        <h3>Experiencia Laboral</h3>
+  <h3>Experiencia Laboral</h3>
 
-        <p><strong>Empresa:</strong> {datos.empresa}</p>
-        <p><strong>Cargo:</strong> {datos.cargo}</p>
-        <p><strong>Área:</strong> {datos.area}</p>
-        <p><strong>Fecha de ingreso:</strong> {datos.fechaIngreso}</p>
-        <p><strong>Fecha de retiro:</strong> {datos.fechaRetiro}</p>
-        <p><strong>Funciones:</strong> {datos.funciones}</p>
-        <p><strong>Referencia:</strong> {datos.referencia}</p>
-
+  {Array.isArray(datos.experiencias) && datos.experiencias.length > 0 ? (
+    datos.experiencias.map((exp, index) => (
+      <div key={index} style={{ marginBottom: '15px', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
+        <p><strong>Empresa:</strong> {exp.empresa}</p>
+        <p><strong>Cargo:</strong> {exp.cargo}</p>
+        <p><strong>Área:</strong> {exp.area}</p>
+        <p><strong>Fecha de ingreso:</strong> {exp.fechaIngreso}</p>
+        <p><strong>Fecha de retiro:</strong> {exp.fechaRetiro}</p>
+        <p><strong>Funciones:</strong> {exp.funciones}</p>
+        <p><strong>Referencia:</strong> {exp.referencia}</p>
         <p>
           <strong>Certificado:</strong>{" "}
-          {datos.certificadoLaboral
-            ? datos.certificadoLaboral.name
+          {exp.certificadoLaboral
+            ? exp.certificadoLaboral.name
             : "No adjuntado"}
         </p>
-      </section>
+      </div>
+    ))
+  ) : (
+    <p>No hay experiencia laboral registrada.</p>
+  )}
+</section>
 
       <div className="botones">
         <button
@@ -80,6 +95,8 @@ function VistaPrevia({ datos, onVolver, onEditarAcademico }) {
           Finalizar
         </button>
       </div>
+
+      
 
     </div>
   );
