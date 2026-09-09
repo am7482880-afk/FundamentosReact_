@@ -41,6 +41,39 @@ function App() {
     certificadoLaboral: null
   });
 
+  //CONECTAR REACT CON FLASK
+  const guardarhv = async () => {
+    try{
+      const datosapi = {
+        nombre: datos.nombre,
+        apellido: datos.apellido,
+        correo: datos.correo,
+        direccion: datos.direccion,
+        perfil: datos.perfil
+      };
+
+      const respuesta = await fetch(
+        "http://127.0.0.1:5000/api/registrohv",
+        {
+          method: "POST",
+          
+          headers: {
+            "Content-Type": "aplication/json"
+          },
+
+          body: JSON.stringify(datosapi)
+
+        }
+      );
+      
+      const resultado = await respuesta.json();
+      console.log("Respuesta realizada", resultado);
+
+    }catch(error){
+      console.error("Error al conectar con flask", error)
+    }
+  };
+
   return (
     <>
       <Header />
