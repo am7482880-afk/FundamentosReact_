@@ -27,51 +27,56 @@ function App() {
     titulo: "",
     fechaInicio: "",
     fechaFinalizacion: "",
-    cursos: "",
+    cursos: [],
     certificadoAcademico: null,
-
-    // Experiencia
-    empresa: "",
-    cargo: "",
-    area: "",
-    fechaIngreso: "",
-    fechaRetiro: "",
-    funciones: "",
-    referencia: "",
-    certificadoLaboral: null
+    experiencias: []
   });
 
-  //CONECTAR REACT CON FLASK
-  const guardarhv = async () => {
-    try{
+  // CONECTAR REACT CON FLASK
+const guardarhv = async () => {
+    try {
       const datosapi = {
-        nombre: datos.nombre,
-        apellido: datos.apellido,
-        correo: datos.correo,
-        direccion: datos.direccion,
-        perfil: datos.perfil
+        Fotografia: datos.fotografia || "foto_default.jpg",
+        Nombres: datos.nombre,
+        Apellidos: datos.apellido,
+        Correo: datos.correo,
+        Direccion: datos.direccion,
+        Perfil_Profesional: datos.perfil
       };
 
       const respuesta = await fetch(
         "http://127.0.0.1:5000/api/registrohv",
         {
           method: "POST",
-          
           headers: {
-            "Content-Type": "aplication/json"
+            "Content-Type": "application/json"
           },
-
           body: JSON.stringify(datosapi)
-
         }
       );
       
       const resultado = await respuesta.json();
-      console.log("Respuesta realizada", resultado);
 
-    }catch(error){
-      console.error("Error al conectar con flask", error)
+      if (respuesta.ok) {
+        console.log("Respuesta realizada", resultado);
+        alert("Hoja de vida registrada con éxito en la base de datos.");
+      } else {
+        console.error("Error devuelto por el servidor:", resultado);
+        alert("Ocurrió un error al guardar: " + (resultado.mensaje || "Error en Flask"));
+      }
+
+    } catch (error) {
+      console.error("Error al conectar con flask", error);
     }
+  };
+
+  // Función para guardar el arreglo de experiencias y cambiar al paso 4
+  const handleGuardarExperiencias = (listaExperiencias) => {
+    setDatos((prevDatos) => ({
+      ...prevDatos,
+      experiencias: listaExperiencias
+    }));
+    setPaso(4);
   };
 
   return (
@@ -100,7 +105,7 @@ function App() {
           datos={datos}
           setDatos={setDatos}
           onVolver={() => setPaso(2)}
-          onSiguiente={() => setPaso(4)}
+          onSiguiente={handleGuardarExperiencias} // Guarda las experiencias recibidas
         />
       )}
 
@@ -108,6 +113,7 @@ function App() {
         <VistaPrevia
           datos={datos}
           onVolver={() => setPaso(3)}
+          onEditarAcademico={() => setPaso(2)}
         />
       )}
 

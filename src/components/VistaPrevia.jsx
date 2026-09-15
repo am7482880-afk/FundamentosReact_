@@ -1,3 +1,5 @@
+import React from 'react';
+
 function VistaPrevia({ datos, onVolver, onEditarAcademico }) {
   const finalizar = () => {
     alert("Hoja de vida registrada correctamente.");
@@ -5,21 +7,20 @@ function VistaPrevia({ datos, onVolver, onEditarAcademico }) {
 
   return (
     <div className="formulario">
-
       <h2>Vista Previa de la Hoja de Vida</h2>
 
+      {/* INFORMACIÓN PERSONAL */}
       <section className="preview-seccion">
         <h3>Información Personal</h3>
-
         <p><strong>Nombre:</strong> {datos.nombre} {datos.apellido}</p>
         <p><strong>Correo:</strong> {datos.correo}</p>
         <p><strong>Dirección:</strong> {datos.direccion}</p>
         <p><strong>Perfil Profesional:</strong> {datos.perfil}</p>
       </section>
 
+      {/* INFORMACIÓN ACADÉMICA */}
       <section className="preview-seccion">
         <h3>Información Académica</h3>
-
         <p><strong>Nivel:</strong> {datos.nivel}</p>
         <p><strong>Institución:</strong> {datos.institucion}</p>
         <p><strong>Título:</strong> {datos.titulo}</p>
@@ -54,32 +55,47 @@ function VistaPrevia({ datos, onVolver, onEditarAcademico }) {
         </button>
       </section>
 
+      {/* EXPERIENCIA LABORAL */}
       <section className="preview-seccion">
-  <h3>Experiencia Laboral</h3>
+        <h3>Experiencia Laboral</h3>
 
-  {Array.isArray(datos.experiencias) && datos.experiencias.length > 0 ? (
-    datos.experiencias.map((exp, index) => (
-      <div key={index} style={{ marginBottom: '15px', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
-        <p><strong>Empresa:</strong> {exp.empresa}</p>
-        <p><strong>Cargo:</strong> {exp.cargo}</p>
-        <p><strong>Área:</strong> {exp.area}</p>
-        <p><strong>Fecha de ingreso:</strong> {exp.fechaIngreso}</p>
-        <p><strong>Fecha de retiro:</strong> {exp.fechaRetiro}</p>
-        <p><strong>Funciones:</strong> {exp.funciones}</p>
-        <p><strong>Referencia:</strong> {exp.referencia}</p>
-        <p>
-          <strong>Certificado:</strong>{" "}
-          {exp.certificadoLaboral
-            ? exp.certificadoLaboral.name
-            : "No adjuntado"}
-        </p>
-      </div>
-    ))
-  ) : (
-    <p>No hay experiencia laboral registrada.</p>
-  )}
-</section>
+        {Array.isArray(datos.experiencias) && datos.experiencias.length > 0 ? (
+          datos.experiencias.map((exp, index) => (
+            <div key={index} style={{ marginBottom: '15px', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
+              <p><strong>Empresa:</strong> {exp.empresa}</p>
+              <p><strong>Cargo:</strong> {exp.cargo}</p>
+              <p><strong>Área:</strong> {exp.area}</p>
+              <p><strong>Fecha de ingreso:</strong> {exp.fechaIngreso}</p>
+              <p><strong>Fecha de retiro:</strong> {exp.fechaRetiro}</p>
+              <p><strong>Funciones:</strong> {exp.funciones}</p>
+              <p><strong>Referencia:</strong> {exp.referencia}</p>
+              <div>
+                <strong>Habilidades:</strong>
+                {Array.isArray(exp.habilidades) && exp.habilidades.length > 0 ? (
+                  <ul>
+                    {exp.habilidades.map((hab, i) => (
+                      <li key={i}>{hab}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <span> No registradas</span>
+                )}
+              </div>
 
+              <p>
+                <strong>Certificado:</strong>{" "}
+                {exp.certificadoLaboral
+                  ? exp.certificadoLaboral.name
+                  : "No adjuntado"}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p>No hay experiencia laboral registrada.</p>
+        )}
+      </section>
+
+      {/* BOTONES PRINCIPALES */}
       <div className="botones">
         <button
           type="button"
@@ -95,9 +111,6 @@ function VistaPrevia({ datos, onVolver, onEditarAcademico }) {
           Finalizar
         </button>
       </div>
-
-      
-
     </div>
   );
 }

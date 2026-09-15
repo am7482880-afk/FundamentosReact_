@@ -1,146 +1,131 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-function FormularioExperiencia({
-  datos,
-  setDatos,
-  onVolver,
-  onSiguiente
-}) {
+export default function FormularioExperiencia({ onSiguiente, onVolver }) {
+  // Lista de experiencias agregadas en este formulario
+  const [experiencias, setExperiencias] = useState([]);
 
-  // Estado local para la experiencia actual que se está digitando
-  const [nuevaExp, setNuevaExp] = useState({
-    empresa: '',
-    cargo: '',
-    area: '',
-    fechaIngreso: '',
-    fechaRetiro: '',
-    funciones: '',
-    referencia: '',
-    certificadoLaboral: null
-  });
+  // Campos del formulario
+  const [empresa, setEmpresa] = useState('');
+  const [cargo, setCargo] = useState('');
+  const [area, setArea] = useState('');
+  const [fechaIngreso, setFechaIngreso] = useState('');
+  const [fechaRetiro, setFechaRetiro] = useState('');
+  const [trabajoActual, setTrabajoActual] = useState(false);
+  const [funciones, setFunciones] = useState('');
+  const [referencia, setReferencia] = useState('');
+  const [certificadoLaboral, setCertificadoLaboral] = useState(null);
 
-  // Función para capturar los cambios en cada input de la experiencia local
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setNuevaExp({
-      ...nuevaExp,
-      [name]: files ? files[0] : value
-    });
+  // Estado para Habilidades
+  const [habilidadTemp, setHabilidadTemp] = useState('');
+  const [habilidades, setHabilidades] = useState([]);
+
+  const agregarHabilidad = () => {
+    if (!habilidadTemp.trim()) return;
+    setHabilidades([...habilidades, habilidadTemp.trim()]);
+    setHabilidadTemp('');
   };
 
-  // Función para guardar la experiencia actual en el array general con validación de campos
-  const agregarExperiencia = () => {
-    
-    // VALIDACIONES DE CAMPOS OBLIGATORIOS (Antes de meterlo a la lista)
-    if (nuevaExp.empresa.trim() === "") {
-      alert("Agregue el nombre de la empresa");
-      return;
-    }
-
-    if (nuevaExp.cargo.trim() === "") {
-      alert("Agregue el cargo desempeñado");
-      return;
-    }
-
-    if (nuevaExp.area.trim() === "") {
-      alert("Ingrese el área de trabajo");
-      return;
-    }
-
-    if (nuevaExp.fechaIngreso.trim() === "") {
-      alert("Seleccione la fecha de ingreso");
-      return;
-    }
-
-    if (nuevaExp.fechaRetiro.trim() === "") {
-      alert("Ingrese la fecha de retiro");
-      return;
-    }
-
-    if (nuevaExp.funciones.trim() === "") {
-      alert("Describa las funciones realizadas");
-      return;
-    }
-
-    if (nuevaExp.referencia.trim() === "") {
-      alert("Ingrese una referencia laboral");
-      return;
-    }
-
-    // Si pasa todas las validaciones individuales, se guarda en el arreglo general
-    setDatos({
-      ...datos,
-      experiencias: [...(Array.isArray(datos.experiencias) ? datos.experiencias : []), nuevaExp]
-    });
-
-    // Limpiar el formulario local de experiencia
-    setNuevaExp({
-      empresa: '',
-      cargo: '',
-      area: '',
-      fechaIngreso: '',
-      fechaRetiro: '',
-      funciones: '',
-      referencia: '',
-      certificadoLaboral: null
-    });
-
-    // Resetea el input de tipo archivo visualmente en la pantalla
-    const fileInput = document.querySelector('input[type="file"][name="certificadoLaboral"]');
-    if (fileInput) fileInput.value = '';
+  const eliminarHabilidad = (index) => {
+    setHabilidades(habilidades.filter((_, i) => i !== index));
   };
 
-  // Función para borrar una experiencia de la lista
-  const eliminarExperiencia = (indexParaEliminar) => {
-    const experienciasActuales = Array.isArray(datos.experiencias) ? datos.experiencias : [];
-    const experienciasFiltradas = experienciasActuales.filter((_, index) => index !== indexParaEliminar);
-    
-    setDatos({
-      ...datos,
-      experiencias: experienciasFiltradas
-    });
-  };
+  // AGREGAR EXPERIENCIA A LA LISTA LOCAL
+  const agregarBloqueExperiencia = (e) => {
+    if (e) e.preventDefault(); // Evita recarga si se dispara por enter
 
-  const continuar = (e) => {
-    e.preventDefault();
-
-    if (nuevaExp.empresa.trim() !== "" || nuevaExp.cargo.trim() !== "") {
-      alert("Tienes datos escritos. Por favor, pulsa primero el botón '+ Agregar esta experiencia'.");
+    if (!empresa || !cargo) {
+      alert('Por favor ingresa al menos la Empresa y el Cargo.');
       return;
     }
 
-    if (!Array.isArray(datos.experiencias) || datos.experiencias.length === 0) {
-      alert("Debes agregar al menos una experiencia laboral para continuar");
-      return; 
+    const nuevaExp = {
+      empresa,
+      cargo,
+      area,
+      fechaIngreso,
+      fechaRetiro: trabajoActual ? 'Actualmente' : fechaRetiro,
+      funciones,
+      referencia,
+      certificadoLaboral,
+      habilidades
+    };
+
+    // Añade inmediatamente al arreglo
+    setExperiencias((prev) => [...prev, nuevaExp]);
+
+    // Limpia los inputs para ingresar otra
+    setEmpresa('');
+    setCargo('');
+    setArea('');
+    setFechaIngreso('');
+    setFechaRetiro('');
+    setTrabajoActual(false);
+    setFunciones('');
+    setReferencia('');
+    setCertificadoLaboral(null);
+    setHabilidades([]);
+  };
+
+  const eliminarExperiencia = (index) => {
+    setExperiencias(experiencias.filter((_, i) => i !== index));
+  };
+
+  // ENVIAR TODO AL COMPONENTE PADRE
+  const handleGuardarTodo = () => {
+    let listaFinal = [...experiencias];
+
+    // Si hay datos escritos en los inputs y no ha dado clic en "+ Añadir esta experiencia", se incluyen
+    if (empresa.trim() !== '' || cargo.trim() !== '') {
+      if (!empresa || !cargo) {
+        alert('Por favor completa los campos de Empresa y Cargo antes de guardar.');
+        return;
+      }
+
+      const expPendiente = {
+        empresa,
+        cargo,
+        area,
+        fechaIngreso,
+        fechaRetiro: trabajoActual ? 'Actualmente' : fechaRetiro,
+        funciones,
+        referencia,
+        certificadoLaboral,
+        habilidades
+      };
+
+      listaFinal.push(expPendiente);
     }
 
-    onSiguiente();
+    if (listaFinal.length === 0) {
+      alert('Por favor añade al menos una experiencia laboral.');
+      return;
+    }
+
+    // Pasa la lista completa al padre (quien gestiona "datos.experiencias")
+    if (typeof onSiguiente === 'function') {
+      onSiguiente(listaFinal);
+    }
   };
 
   return (
-    <form className="formulario" onSubmit={continuar}>
-
+    <div className="formulario">
       <h2>Experiencia Laboral</h2>
 
       <div className="campo">
         <label>Empresa</label>
         <input
           type="text"
-          name="empresa"
-          placeholder="Nombre de la empresa"
-          value={nuevaExp.empresa}
-          onChange={handleChange}
+          value={empresa}
+          onChange={(e) => setEmpresa(e.target.value)}
         />
       </div>
 
       <div className="campo">
-        <label>Cargo desempeñado</label>
+        <label>Cargo</label>
         <input
           type="text"
-          name="cargo"
-          placeholder="Cargo"
-          value={nuevaExp.cargo}
-          onChange={handleChange}
+          value={cargo}
+          onChange={(e) => setCargo(e.target.value)}
         />
       </div>
 
@@ -148,92 +133,130 @@ function FormularioExperiencia({
         <label>Área</label>
         <input
           type="text"
-          name="area"
-          placeholder="Área de trabajo"
-          value={nuevaExp.area}
-          onChange={handleChange}
+          value={area}
+          onChange={(e) => setArea(e.target.value)}
         />
       </div>
 
       <div className="campo">
-        <label>Fecha de ingreso</label>
+        <label>Fecha de Ingreso</label>
         <input
           type="date"
-          name="fechaIngreso"
-          value={nuevaExp.fechaIngreso}
-          onChange={handleChange}
+          value={fechaIngreso}
+          onChange={(e) => setFechaIngreso(e.target.value)}
         />
       </div>
 
-      <div className="campo">
-        <label>Fecha de retiro</label>
+      {!trabajoActual && (
+        <div className="campo">
+          <label>Fecha de Retiro</label>
+          <input
+            type="date"
+            value={fechaRetiro}
+            onChange={(e) => setFechaRetiro(e.target.value)}
+          />
+        </div>
+      )}
+
+      <div className="campo" style={{ flexDirection: 'row', alignItems: 'center', gap: '10px' }}>
         <input
-          type="date"
-          name="fechaRetiro"
-          value={nuevaExp.fechaRetiro}
-          onChange={handleChange}
+          type="checkbox"
+          id="trabajoActual"
+          checked={trabajoActual}
+          onChange={(e) => setTrabajoActual(e.target.checked)}
+          style={{ width: 'auto' }}
         />
+        <label htmlFor="trabajoActual" style={{ margin: 0 }}>
+          Trabajo actualmente aquí
+        </label>
       </div>
 
       <div className="campo">
-        <label>Funciones realizadas</label>
+        <label>Funciones</label>
         <textarea
-          rows="5"
-          name="funciones"
-          placeholder="Describa las funciones desempeñadas"
-          value={nuevaExp.funciones}
-          onChange={handleChange}
+          rows="4"
+          value={funciones}
+          onChange={(e) => setFunciones(e.target.value)}
         ></textarea>
       </div>
 
       <div className="campo">
-        <label>Referencia laboral</label>
+        <label>Referencia Laboral</label>
         <input
           type="text"
-          name="referencia"
-          placeholder="Nombre y teléfono"
-          value={nuevaExp.referencia}
-          onChange={handleChange}
+          value={referencia}
+          onChange={(e) => setReferencia(e.target.value)}
         />
       </div>
 
       <div className="campo">
-        <label>Adjuntar certificado laboral</label>
+        <label>Certificado (Soporte)</label>
         <input
           type="file"
-          name="certificadoLaboral"
-          onChange={handleChange}
+          onChange={(e) => setCertificadoLaboral(e.target.files[0])}
         />
-        {nuevaExp.certificadoLaboral && (
-          <small className="archivo-adjunto">
-            Archivo: {nuevaExp.certificadoLaboral.name}
-          </small>
+      </div>
+
+      {/* HABILIDADES */}
+      <div className="campo">
+        <label>Habilidades / Competencias aplicadas</label>
+        <div className="grupo-agregar-curso">
+          <input
+            type="text"
+            value={habilidadTemp}
+            onChange={(e) => setHabilidadTemp(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), agregarHabilidad())}
+          />
+          <button
+            type="button"
+            className="btn-agregar"
+            onClick={agregarHabilidad}
+          >
+            + Agregar
+          </button>
+        </div>
+
+        {habilidades.length > 0 && (
+          <ul className="lista-cursos">
+            {habilidades.map((hab, index) => (
+              <li key={index}>
+                <span>{hab}</span>
+                <button
+                  type="button"
+                  className="btn-eliminar"
+                  onClick={() => eliminarHabilidad(index)}
+                >
+                  ✕
+                </button>
+              </li>
+            ))}
+          </ul>
         )}
       </div>
 
+      {/* BOTÓN AGREGAR EXP LOCAL */}
       <button
         type="button"
         className="btn-bloque-agregar"
-        onClick={agregarExperiencia}
+        onClick={agregarBloqueExperiencia}
       >
-        + Agregar esta experiencia
+        + Añadir esta experiencia
       </button>
 
-      {Array.isArray(datos.experiencias) && datos.experiencias.length > 0 && (
+      {/* LISTA DE EXPERIENCIAS YA AÑADIDAS */}
+      {experiencias.length > 0 && (
         <div className="contenedor-experiencias-lista">
-          <h3>Experiencias agregadas ({datos.experiencias.length})</h3>
+          <h3>Experiencias agregadas ({experiencias.length}):</h3>
           <ul className="lista-experiencias">
-            {datos.experiencias.map((exp, index) => (
+            {experiencias.map((item, index) => (
               <li key={index}>
                 <div className="info-exp">
-                  <strong>{exp.cargo}</strong> en <em>{exp.empresa}</em>
-                  {exp.area && <small> ({exp.area})</small>}
+                  <strong>{item.cargo}</strong> en <em>{item.empresa}</em>
                 </div>
                 <button
                   type="button"
                   className="btn-eliminar"
                   onClick={() => eliminarExperiencia(index)}
-                  title="Eliminar experiencia"
                 >
                   ✕
                 </button>
@@ -243,21 +266,16 @@ function FormularioExperiencia({
         </div>
       )}
 
+      {/* BOTONES PRINCIPALES */}
       <div className="botones">
-        <button
-          type="button"
-          onClick={onVolver}
-        >
+        <button type="button" onClick={onVolver}>
           Volver
         </button>
 
-        <button type="submit">
-          Ver hoja de vida
+        <button type="button" onClick={handleGuardarTodo}>
+          Guardar todo
         </button>
       </div>
-
-    </form>
+    </div>
   );
 }
-
-export default FormularioExperiencia;
