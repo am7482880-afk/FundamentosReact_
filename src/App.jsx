@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -88,6 +89,7 @@ const guardarhv = async () => {
           datos={datos}
           setDatos={setDatos}
           onSiguiente={() => setPaso(2)}
+          guardarhv={guardarhv}
         />
       )}
 

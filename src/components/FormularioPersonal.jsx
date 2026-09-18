@@ -1,4 +1,4 @@
-function FormularioPersonal({ onSiguiente, datos, setDatos }) {
+function FormularioPersonal({ onSiguiente, datos, setDatos, guardarhv }) {
   
   const continuar = (e) => {
     e.preventDefault();
@@ -33,8 +33,10 @@ function FormularioPersonal({ onSiguiente, datos, setDatos }) {
       alert("Describa su perfil profesional");
       return;
     }
+
     
-    onSiguiente();
+    
+    guardarhv(), onSiguiente();
   };
 
   const manejarCambioArchivo = (e) => {
