@@ -36,7 +36,7 @@ function FormularioPersonal({ onSiguiente, datos, setDatos, guardarhv }) {
 
     
     
-    guardarhv(), onSiguiente();
+    onSiguiente();
   };
 
   const manejarCambioArchivo = (e) => {
